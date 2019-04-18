@@ -29,28 +29,31 @@ app.get('/api/price', (req, res) => {
     //   res.status(200).json(data)
     // })
 
-    // search for all
+    // search for first 730
     Stock.find({}, (err, data) => {
       if (err) {return err}
       res.send(data)
-    }).limit(730);
+    });
 });
 
 /************************************************************************/
-// SDC: Post endpoint 
+// SDC: POST endpoint 
 app.post('/api/price', (req, res) => {
-  Stock.create(req.body)
-  .then(() => db.close());
+  var newStock = req.body;
+  Stock.create(newStock, (err, data) => {
+    if (err) {return err};
+    console.log("Post successful");
+  })
 })
 
-// SDC: Delete endpoint 
+// SDC: DELETE endpoint 
 app.delete('/api/price/:id', (req, res) => {
   // acquire id of thing you want to delete
   var id = req.params.id;
   Stock.deleteOne({id: id});
 });
 
-// SDC: Update endpoint                                   Still need to appoint id with nextId var.
+// SDC: UPDATE endpoint                                   Still need to appoint id with nextId var.
 app.patch('/api/price/:id', (req, res) => {
   // set Default data equal to 001
   Stock.updateOne({id: id});
