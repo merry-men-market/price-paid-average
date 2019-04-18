@@ -8,30 +8,30 @@ npm run start
 
 ## CRUD API
 
-###CREATE
-Creation of a company and it's stock records over 252 trading days.
+  ###CREATE
+  Creation of a company and it's stock records over 252 trading days.
 
-```sh
-/api/price
-```
+  ```sh
+  /api/price
+  ```
 
-###READ
-Get all companies and their stock records.
-```sh
-/api/price
-```
+  ###READ
+  Get all companies and their stock records.
+  ```sh
+  /api/price
+  ```
 
 
-###UPDATE
-Update a company's information or stock record.
+  ###UPDATE
+  Update a company's information or stock record.
 
-```sh
-/api/price/:id
-```
+  ```sh
+  /api/price/:id
+  ```
 
-###DELETE
-Delete a company and all of it's records.
+  ###DELETE
+  Delete a company and all of it's records.
 
-```sh
-/api/price/:id
-```
+  ```sh
+  /api/price/:id
+  ```
