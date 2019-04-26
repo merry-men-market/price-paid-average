@@ -558,50 +558,85 @@ const companyData = [
 
 // writeStream.write(']');
 
-function writeTenMillionTimes(writer, data) {
-  return new Promise((resolve) => {
-    if (writer.write(data)) {
-      // console.log('drained');
-      writer.once('drain', resolve);
-    } else {
-      // console.log('not drained');
-      resolve();
+// function writeTenMillionTimes(writer, data) {
+//   return new Promise((resolve) => {
+//     if (writer.write(data)) {
+//       // console.log('drained');
+//       writer.once('drain', resolve);
+//     } else {
+//       // console.log('not drained');
+//       resolve();
+//     }
+//   });
+// }
+
+// const generateStockData = () => {
+//   const writeStream = fs.createWriteStream('stocks.csv');
+
+//   for (let i = 0; i < 10000000; i += 1) {
+//     const randomIdx = Math.floor(Math.random() * 100);
+//     const stock = {
+//       company: companyData[randomIdx].company,
+//       prices: [], // 52 items to 52 weeks
+//       id: i,
+//       ticker: companyData[randomIdx].ticker + i,
+//     };
+
+//     for (let week = 0; week < 52; week += 1) {
+//       const price = Faker.finance.amount(0.00, 1000.00);
+//       stock.prices.push(price);
+//     }
+
+//     const newArr = stock.prices.join('|');
+//     var record = `${stock.id},${JSON.stringify(stock.company)},${JSON.stringify(newArr)},${JSON.stringify(stock.ticker)}\n`;
+
+//     console.log(i);
+//   }
+// };
+// generateStockData();
+
+const writeStream = fs.createWriteStream('test.csv');
+
+function writeTenMillionTimes(writer, encoding, callback) {
+  let i = 10000000;
+  function write() {
+    let ok = true;
+    do {
+      const randomIdx = Math.floor(Math.random() * 100);
+      const stock = {
+        company: companyData[randomIdx].company + i,
+        prices: [], // 52 items to 52 weeks
+        id: i,
+        ticker: companyData[randomIdx].ticker + i,
+      };
+
+      for (let week = 0; week < 52; week += 1) {
+        const price = Faker.finance.amount(0.00, 1000.00);
+        stock.prices.push(price);
+      }
+
+      const newArr = stock.prices.join('|');
+      const record = `${stock.id},${JSON.stringify(stock.company)},${JSON.stringify(newArr)},${JSON.stringify(stock.ticker)}\n`;
+      console.log(i);
+      i -= 1;
+      if (i === 0) {
+        // last time!
+        writer.write(record, encoding, callback);
+      } else {
+        // See if we should continue, or wait.
+        // Don't pass the callback, because we're not done yet.
+        ok = writer.write(record, encoding);
+      }
+    } while (i > 0 && ok);
+    if (i > 0) {
+      // had to stop early!
+      // write some more once it drains
+      writer.once('drain', write);
     }
-  });
+  }
+  write();
 }
 
-const generateStockData = () => {
-  const writeStream = fs.createWriteStream('data.csv');
-  writeStream.write('[');
-
-  let chunk = [];
-  for (let i = 0; i < 10000000; i += 1) {
-    const randomIdx = Math.floor(Math.random() * 100);
-    const stock = {
-      company: companyData[randomIdx].company,
-      price: [],  // 52 items to 52 weeks
-      id: i,
-      ticker: companyData[randomIdx].ticker + i,
-    };
-
-    for (let week = 0; week < 52; week += 1) {
-      const price = Faker.finance.amount(0.00, 1000.00);
-      stock.price.push(price);
-      // writeStream.write(stock);
-      // console.log('test', writeStream.write(`${JSON.stringify(stock)},\n`));
-    }
-    if (i !== 0 && i % 10 === 0) {
-      writeTenMillionTimes(writeStream, `${JSON.stringify(chunk)},`);
-      chunk = [];
-    } else {
-      chunk.push(stock);
-    }
-
-    if (i !== 0 && i % 1000 === 0) {
-      writeStream.write('\n');
-    }
-    console.log(i);
-  }
-  writeStream.write(']');
-};
-generateStockData();
+writeTenMillionTimes(writeStream, 'UTF8', () => {
+  console.log('Seeding Complete');
+});
