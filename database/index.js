@@ -1,13 +1,9 @@
-
 require('../server/server.js');
 const Sequelize = require('sequelize');
 
-const user = 'root';
-const pass = '';
+const user = 'Julius';
 
-
-// Option 1: Passing parameters separately
-const sequelize = new Sequelize('test', user, pass, {
+const sequelize = new Sequelize('stocks', 'postgres', user, {
   host: 'localhost',
   dialect: 'postgres',
 });
@@ -15,8 +11,8 @@ const sequelize = new Sequelize('test', user, pass, {
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Connection has been established successfully.');
+    console.log('Postgres connection successful');
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
