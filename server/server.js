@@ -9,7 +9,7 @@ require('newrelic');
 // const Stock = require('../database/StockPricePaid/StockScheme.js');
 
 const app = express();
-const port = process.env.PORT || 8889;
+const port = process.env.PORT || 8008;
 
 // app.use(express.static(`${__dirname}/../public/`));
 app.use(cors());
@@ -81,6 +81,6 @@ app.get('/api/:id', (req, res) => {
 // });
 
 app.listen(port, () => {
-  console.log(`server running at: http://localhost:${port}`);
+  console.log(`server running at: ec2-18-206-231-125.compute-1.amazonaws.com:${port}`);
 });
 
