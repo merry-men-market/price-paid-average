@@ -19,8 +19,9 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
 const pool = new Pool({
-  user: '',
-  host: 'localhost',
+  user: 'julius',
+  password: 'apple477',
+  host: 'ec2-18-206-231-125.compute-1.amazonaws.com',
   database: 'stocks',
   port: 5432,
 });

@@ -595,7 +595,7 @@ const companyData = [
 // };
 // generateStockData();
 
-const writeStream = fs.createWriteStream('test.csv');
+const writeStream = fs.createWriteStream('stocks.csv');
 
 function writeTenMillionTimes(writer, encoding, callback) {
   let i = 10000000;
@@ -627,6 +627,7 @@ function writeTenMillionTimes(writer, encoding, callback) {
         // Don't pass the callback, because we're not done yet.
         ok = writer.write(record, encoding);
       }
+      console.log(i);
     } while (i > 0 && ok);
     if (i > 0) {
       // had to stop early!
